@@ -1,10 +1,11 @@
 
 package com.test;
 
-import java.io.IOException;
+/*import java.io.IOException;
 import java.util.Iterator;
 import com.bean.School;
-import com.business.update.IllinoisUpdateStrategy;
+import com.business.update.IllinoisUpdateStrategy;*/
+import com.gui.ReportGUI;
 
 public class Test {
 
@@ -14,7 +15,13 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		IllinoisUpdateStrategy st = new IllinoisUpdateStrategy();
+		  java.awt.EventQueue.invokeLater(new Runnable() {
+	            public void run() {
+	                new ReportGUI().setVisible(true);
+	            }
+	        });
+		  
+/*		IllinoisUpdateStrategy st = new IllinoisUpdateStrategy();
 		try {
 			Iterator<School> temp = st.getData();
 			
@@ -28,7 +35,7 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+*/
 	}
 
 }

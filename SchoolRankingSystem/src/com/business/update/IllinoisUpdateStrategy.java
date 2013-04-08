@@ -122,7 +122,7 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			
 			next.setName(a[3]);
 			next.setDistrict(a[4]);
-			next.setCounty(a[5]);
+			next.setCounty(a[6]);
 			next.setPercentWhite(parseFloat(a[13]));
 			next.setPercentBlack(parseFloat(a[14]));
 			next.setPercentHispanic(parseFloat(a[15]));
