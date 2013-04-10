@@ -382,8 +382,8 @@ public class School{
 					"graduationRateDisabled,graduationRateLowIncome,percentWhite,percentBlack,percentHispanic,percentAsian,"+
 					"percentHawaiian,percentIndian,percentMultiracial,percentLowIncome,percentLep,percentIep,percentHsDropout,"+
 					"percentChronicTruancy,percentLowMobility,attendanceRate)"+
-					"VALUES ( '"+getName()+"',"
-					+ "'" +getDistrict()+ "', '" +getCounty()+ "',"+getStudentsPerTeacher()+","+getTotalEnrollment()+","
+					"VALUES ( '"+getName().replace("'", "+char(39)+")+"',"
+					+ "'" +getDistrict().replace("'", "+char(39)+")+ "', '" +getCounty().replace("'", "+char(39)+")+ "',"+getStudentsPerTeacher()+","+getTotalEnrollment()+","
 					+getAverageTeacherSalary()+","+getAverageAct()+","+getPercentPassingOverall()+","
 					+getPercentPassingIsat()+","+getPercentPassingPsae()+","+getPercentPassingIaa()+","+getGraduationRateOverall()+","
 					+getGraduationRateMale()+","+getGraduationRateFemale()+","+getGraduationRateWhite()+","
@@ -395,8 +395,13 @@ public class School{
 					+getPercentLowIncome()+","+getPercentLep()+","+getPercentIep()+","+getPercentHsDropout()+","
 					+getPercentChronicTruancy()+","+getPercentLowMobility()+","+getAttendanceRate()+")";;
 
-			System.out.println(buildStatement);
+			//System.out.println(buildStatement);
+			try {
 			statement.executeUpdate(buildStatement);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

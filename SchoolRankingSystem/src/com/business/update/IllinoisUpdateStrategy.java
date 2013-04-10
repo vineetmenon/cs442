@@ -164,12 +164,7 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			next.setPercentPassingIsat(parseFloat(a[13]));
 			next.setPercentPassingPsae(parseFloat(a[21]));
 			next.setPercentPassingIaa(parseFloat(a[29]));
-			try {
-				next.save(conn);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 		}
 		
