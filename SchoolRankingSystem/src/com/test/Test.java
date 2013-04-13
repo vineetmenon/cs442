@@ -17,13 +17,14 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		 /* java.awt.EventQueue.invokeLater(new Runnable() {
+			
+		  java.awt.EventQueue.invokeLater(new Runnable() {
 	            public void run() {
 	                new ReportGUI().setVisible(true);
 	            }
-	        });*/
+	        });
 		  
-		IllinoisUpdateStrategy st = new IllinoisUpdateStrategy();
+		/*IllinoisUpdateStrategy st = new IllinoisUpdateStrategy();
 		try {
 			Iterator<School> temp = st.getData();
 			
@@ -51,7 +52,7 @@ public class Test {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 

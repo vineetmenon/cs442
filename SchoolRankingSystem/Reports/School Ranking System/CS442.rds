@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="CS442">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=localhost\sqlexpress;Initial Catalog=CS442</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>0f016f26-a3a5-42b1-bff9-f2e2c9215169</DataSourceID>
+</RptDataSource>

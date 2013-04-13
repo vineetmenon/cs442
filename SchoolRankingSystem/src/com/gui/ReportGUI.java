@@ -18,12 +18,17 @@ package com.gui;
 
 //
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 import javax.swing.ListSelectionModel;
 import javax.swing.JOptionPane;
 import java.util.Collections;
 
 import com.bean.School;
+import com.business.report.GenerateReport;
 import com.business.update.IllinoisUpdateStrategy;
 import java.util.Iterator;
 import java.io.IOException;
@@ -34,7 +39,9 @@ public class ReportGUI extends javax.swing.JFrame {
     /**
 	 * 
 	 */
+	public Map<String,String> columns;
 	private static final long serialVersionUID = 1L;
+	
 	/** Creates new form ReportGUI */
     public ReportGUI() {
         initComponents();
@@ -74,7 +81,8 @@ public class ReportGUI extends javax.swing.JFrame {
 			ResultSet rs= statement.executeQuery(QueryString);
 			while(rs.next()){
 				String tempCounty= rs.getString(4); //check for cook county district
-				if(tempCounty.equals("Cook")){
+				String tempSchoolType = rs.getString(5);
+				if((tempCounty.equals("Cook")) && ( tempSchoolType.equals("HIGH SCHOOL"))){
 					schoolIds.add(rs.getString(1));
 					schoolNamesAndID.add(rs.getString(2) + " (ID#"+ (new Integer(rs.getInt(1))).toString() +")");
 				}
@@ -90,16 +98,24 @@ public class ReportGUI extends javax.swing.JFrame {
 
         //Populate Report Parameters
         Vector<String> reportParametersList= new Vector<String>();
-        reportParametersList.add("Percent Passing Overall");
+        
+        columns = School.getMap();
+        
+        ArrayList<String> columnList = new ArrayList<String>(columns.values());
+        
+        for(int i=0;i<columnList.size();i++) {
+        	reportParametersList.add(columnList.get(i));
+        }
+        /*reportParametersList.add("Percent Passing Overall");
         reportParametersList.add("Percent White");
-        reportParametersList.add("Percent Black");
+        reportParametersList.add("Percent Black");*/
         
         jList2 = new javax.swing.JList(reportParametersList);
         jList2.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
         //Populate Graph Type Box
         jComboBox1 = new javax.swing.JComboBox();
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Choose Type", "Bar Graph", "Line Graph", "Pie-Chart" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Choose Type", "Bar Graph", "Pie Chart", "Scatter Plot" }));
  
         //////////////////
         
@@ -249,29 +265,16 @@ public class ReportGUI extends javax.swing.JFrame {
         
     }// </editor-fold>//GEN-END:initComponents
     
+    private boolean validateForm() {
+    	
+    	return true;
+    }
 // Generate Report
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         boolean okToGenerateReport= true;
        
-    	//Handle Chosen Schools Here
-    	Object[] chosenSchoolsList= null;
-    	chosenSchoolsList= jList1.getSelectedValues(); //get list of chosen schools
-    	//parse id numbers here.  will send to report later.
-    	String[] tempSchoolToken= new String[2];
-    	for(int x=0; x<chosenSchoolsList.length; x++){
-    		tempSchoolToken= chosenSchoolsList[x].toString().split("#|\\)");
-    		System.out.println(tempSchoolToken[1] + " was a chosen school id"); //extract id number from the chosen schools in the jlist.
-    	}
-    	
-    	if(chosenSchoolsList.length == 0){
- 	       JOptionPane.showMessageDialog(this,
-	        	    "You must pick at least 1 school before generating a report.",
-	        	    "Generate Report Error",
-	        	    JOptionPane.ERROR_MESSAGE);
-	       okToGenerateReport=false;
-    	}
-
-    	
+        String idList="";
+        String fieldNames="";
     	//Handle Chosen Graph Here
     	Object graphChosen= jComboBox1.getSelectedItem();
     	if(!graphChosen.equals("Choose Type")){
@@ -282,29 +285,76 @@ public class ReportGUI extends javax.swing.JFrame {
 	        	    "Generate Report Error",
 	        	    JOptionPane.ERROR_MESSAGE);
  	       okToGenerateReport=false;
+ 	       return;
     	}
+    	
+    	//Handle Chosen Schools Here
+    	Object[] chosenSchoolsList= null;
+    	chosenSchoolsList= jList1.getSelectedValues(); //get list of chosen schools
+    	//parse id numbers here.  will send to report later.
+    	String[] tempSchoolToken= new String[2];
+    	
+    	for(int x=0; x<chosenSchoolsList.length; x++){
+    		tempSchoolToken= chosenSchoolsList[x].toString().split("#|\\)");
+    		//System.out.println(tempSchoolToken[1] + " was a chosen school id"); //extract id number from the chosen schools in the jlist.
+    		idList=idList+tempSchoolToken[1]+",";
+    	}
+    	System.out.println("id list "+idList);
+    	if(chosenSchoolsList.length == 0){
+ 	       JOptionPane.showMessageDialog(this,
+	        	    "You must pick at least 1 school before generating a report.",
+	        	    "Generate Report Error",
+	        	    JOptionPane.ERROR_MESSAGE);
+	       okToGenerateReport=false;
+	       return;
+    	}
+
+    	
     	
     	//Handle Chosen Parameters Here
     	Object[] chosenParametersList= null;
     	chosenParametersList= jList2.getSelectedValues();
     	
-    	if(chosenParametersList.length != 0){
+    	
+    	if(((graphChosen=="Bar Graph") && (chosenParametersList.length != 0)) 
+    			||((graphChosen=="Pie Chart") && (chosenParametersList.length == 1))
+    			||((graphChosen=="Scatter Plot") && (chosenParametersList.length == 2))){
     		for(int x=0; x< chosenParametersList.length; x++){
-    			System.out.println("Chosen Parameter #" + x + " is: " + chosenParametersList[x]);
+    			//System.out.println("Chosen Parameter #" + x + " is: " + getKeyByValue(columns,chosenParametersList[x].toString()));
+    			fieldNames=fieldNames+getKeyByValue(columns,chosenParametersList[x].toString())+",";
     		}
+    		System.out.println("parameterlist is: " + fieldNames);
     	}
     	else{
+    		if((graphChosen=="Bar Graph")) {
     		JOptionPane.showMessageDialog(this,
-	        	    "You must pick at least 1 parameter before generating a report.",
+	        	    "You must pick at least 1 parameter before generating a Bar Graph report.",
 	        	    "Generate Report Error",
 	        	    JOptionPane.ERROR_MESSAGE);
+    		} else if (graphChosen=="Pie Chart") {
+    			JOptionPane.showMessageDialog(this,
+    	        	    "You must pick only 1 parameter before generating a Pie Chart report.",
+    	        	    "Generate Report Error",
+    	        	    JOptionPane.ERROR_MESSAGE);
+    		} else if (graphChosen=="Scatter Plot") {
+    			JOptionPane.showMessageDialog(this,
+    	        	    "You must pick only 2 parameter before generating a Scatter Plot report.",
+    	        	    "Generate Report Error",
+    	        	    JOptionPane.ERROR_MESSAGE);
+    		}
+    		
+    		
  	       okToGenerateReport=false;
+ 	       return;
     	}
     	
     	if(okToGenerateReport){
     		//Tests have passed.  Now Generate the Report...
     		
-    		System.out.println("Generating a Report...(not implemented yet)");
+    		System.out.println("Generating a Report...");
+    		String s = fieldNames.substring(0,fieldNames.length()-1);
+    		//System.out.println(s = s.substring(0, s.length() - 1));
+    		GenerateReport.generate(graphChosen.toString(), idList, s);
     		System.out.println("************END OF REPORT***************");
     		
     	}
@@ -384,5 +434,14 @@ public class ReportGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     
     // End of variables declaration//GEN-END:variables
+    
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Entry<T, E> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
 }

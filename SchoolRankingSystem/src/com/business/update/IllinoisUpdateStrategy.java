@@ -18,13 +18,13 @@ import com.bean.*;
 import com.database.DatabaseConnection;
 
 public class IllinoisUpdateStrategy implements UpdateStrategy {
-	
+
 	public static Connection conn;
-	
+
 	private BufferedReader copy(InputStream in) throws IOException {
 		byte[] bytes = new byte[1024 * 1024];
 		int length = 0, r;
-		
+
 		while (true) {
 			if ((r = in.read(bytes, length, bytes.length - length)) >= 0) {
 				length += r;
@@ -34,11 +34,11 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 				break;
 			}
 		}
-		
+
 		return new BufferedReader(new InputStreamReader(
 				new ByteArrayInputStream(bytes, 0, length)));
 	}
-	
+
 	@Override
 	public Iterator<School> getData() throws IOException {
 		BufferedReader p1 = null, p2 = null, p4 = null, p9 = null;
@@ -63,33 +63,33 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			if (zis != null)
 				zis.close();
 		}
-		
+
 		try {
 			conn=DatabaseConnection.getConnection();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return new Iter(p1, p2, p4, p9);
 	}
-	
+
 	private static class Iter implements Iterator<School> {
 		private static final Pattern DELIM = Pattern.compile(" *+; *+");
-		
+
 		private final BufferedReader p1, p2, p4, p9;
 		private School next;
-		
+
 		Iter(BufferedReader p1, BufferedReader p2, BufferedReader p4,
 				BufferedReader p9) throws IOException {
 			this.p1 = p1;
 			this.p2 = p2;
 			this.p4 = p4;
 			this.p9 = p9;
-			
+
 			getNext();
 		}
-		
+
 		private Float average(String s1, String s2) {
 			if (s1.length() == 0) {
 				if (s2.length() == 0)
@@ -103,7 +103,7 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 					return (Float.valueOf(s1) + Float.valueOf(s2)) / 2;
 			}
 		}
-		
+
 		private void getNext() throws IOException {
 			String[] a;
 			{
@@ -119,10 +119,11 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 				a = DELIM.split(line, -1);
 			}
 			next = new School();
-			
+
 			next.setName(a[3]);
 			next.setDistrict(a[4]);
 			next.setCounty(a[6]);
+			next.setSchoolType(a[11]);
 			next.setPercentWhite(parseFloat(a[13]));
 			next.setPercentBlack(parseFloat(a[14]));
 			next.setPercentHispanic(parseFloat(a[15]));
@@ -152,27 +153,27 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			next.setGraduationRateMigrant(average(a[177], a[233]));
 			next.setGraduationRateDisabled(average(a[181], a[237]));
 			next.setGraduationRateLowIncome(average(a[185], a[241]));
-			
+
 			a = DELIM.split(p2.readLine(), -1);
 			next.setAverageAct(parseFloat(a[1]));
-			
+
 			a = DELIM.split(p4.readLine(), -1);
 			next.setAverageTeacherSalary(parseInteger(a[63]));
-			
+
 			a = DELIM.split(p9.readLine(), -1);
 			next.setPercentPassingOverall(parseFloat(a[5]));
 			next.setPercentPassingIsat(parseFloat(a[13]));
 			next.setPercentPassingPsae(parseFloat(a[21]));
 			next.setPercentPassingIaa(parseFloat(a[29]));
-			
-			
+
+
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 			return next != null;
 		}
-		
+
 		@Override
 		public School next() {
 			School s = next;
@@ -183,14 +184,14 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			}
 			return s;
 		}
-		
+
 		private Float parseFloat(String s) {
 			if (s.length() == 0)
 				return null;
 			else
 				return Float.valueOf(s);
 		}
-		
+
 		private Integer parseInteger(String s) {
 			if (s.length() == 0) {
 				return null;
@@ -200,11 +201,11 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 				return Integer.valueOf(s.replace(",", ""));
 			}
 		}
-		
+
 		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-		
+
 	}
 }
