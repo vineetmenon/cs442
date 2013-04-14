@@ -5,15 +5,15 @@
 	<classpathentry kind="lib" path="sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.axis_1.4.0.v201005080400/lib/axis.jar"/>
-	<classpathentry kind="lib" path="C:/eclipse/plugins/org.apache.commons.discovery_0.2.0.v201004190315/lib/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="C:/eclipse/plugins/javax.xml.rpc_1.1.0.v201005080400/lib/jaxrpc.jar"/>
-	<classpathentry kind="lib" path="C:/eclipse/plugins/javax.xml.soap_1.2.0.v201005080501/lib/saaj.jar"/>
-	<classpathentry kind="lib" path="C:/eclipse/plugins/javax.wsdl_1.6.2.v201012040545.jar"/>
 	<classpathentry kind="lib" path="commons-codec.jar"/>
 	<classpathentry kind="lib" path="commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="commons-logging-1.0.2.jar"/>
 	<classpathentry kind="lib" path="javax.mail.jar"/>
 	<classpathentry kind="lib" path="jcifs-1.3.15.jar"/>
+	<classpathentry kind="lib" path="axis.jar"/>
+	<classpathentry kind="lib" path="commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="javax.wsdl_1.6.2.v201012040545.jar"/>
+	<classpathentry kind="lib" path="jaxrpc.jar"/>
+	<classpathentry kind="lib" path="saaj.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
