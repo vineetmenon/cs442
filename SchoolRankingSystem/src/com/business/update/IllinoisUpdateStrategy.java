@@ -1,5 +1,6 @@
 package com.business.update;
 
+import com.bean.School;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -7,19 +8,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.sql.Connection;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.bean.*;
-import com.database.DatabaseConnection;
-
 public class IllinoisUpdateStrategy implements UpdateStrategy {
-
-	public static Connection conn;
+	/**
+	 * Reads the entire stream and return the contents of the stream in a new
+	 * BufferedReader
+	 */
 
 	private BufferedReader copy(InputStream in) throws IOException {
 		byte[] bytes = new byte[1024 * 1024];
@@ -41,9 +41,14 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 
 	@Override
 	public Iterator<School> getData() throws IOException {
+		// we only need 4 of the files in the zip, so we can just store
+		// everything in RAM
 		BufferedReader p1 = null, p2 = null, p4 = null, p9 = null;
 		ZipInputStream zis = null;
 		try {
+			// the data is formatted differently each year, so we need to update
+			// the code yearly anyway. Might as well hardcode the year
+			System.out.println("Starting download");
 			zis = new ZipInputStream(new BufferedInputStream(new URL(
 					"http://www.isbe.net/assessment/zip/"
 							+ "2012_rc_separated.zip").openStream()));
@@ -64,12 +69,7 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 				zis.close();
 		}
 
-		try {
-			conn=DatabaseConnection.getConnection();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("Finished download, beginning parsing");
 
 		return new Iter(p1, p2, p4, p9);
 	}
@@ -105,10 +105,14 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 		}
 
 		private void getNext() throws IOException {
+			// files are semicolon delimited, with added whitespace to line up
+			// columns. Split each line with regex to get array of just the data
 			String[] a;
 			{
 				String line = p1.readLine();
 				if (line == null) {
+					// end of file - release memory. Memory will be released
+					// anyway when iterator is deleted, but why wait
 					next = null;
 					p1.close();
 					p2.close();
@@ -165,7 +169,6 @@ public class IllinoisUpdateStrategy implements UpdateStrategy {
 			next.setPercentPassingIsat(parseFloat(a[13]));
 			next.setPercentPassingPsae(parseFloat(a[21]));
 			next.setPercentPassingIaa(parseFloat(a[29]));
-
 
 		}
 

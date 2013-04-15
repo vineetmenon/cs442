@@ -8,13 +8,14 @@
 package com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.holders;
 
 public final class ArrayOfWarningHolder implements javax.xml.rpc.holders.Holder {
-    public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.Warning[] value;
+	public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.Warning[] value;
 
-    public ArrayOfWarningHolder() {
-    }
+	public ArrayOfWarningHolder() {
+	}
 
-    public ArrayOfWarningHolder(com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.Warning[] value) {
-        this.value = value;
-    }
+	public ArrayOfWarningHolder(
+			com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.Warning[] value) {
+		this.value = value;
+	}
 
 }

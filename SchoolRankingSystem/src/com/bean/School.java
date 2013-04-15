@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-public class School{
+public class School {
 
 	private int id;
 	private String name;
@@ -374,35 +374,100 @@ public class School{
 		try {
 			statement = conn.createStatement();
 
+			String buildStatement = "INSERT INTO CS442.dbo.School(name,district,county,schoolType,"
+					+ "totalEnrollment,averageTeacherSalary,averageAct,percentPassingOverall,"
+					+ "percentPassingIsat,percentPassingPsae,percentPassingIaa,graduationRateOverall,graduationRateMale,"
+					+ "graduationRateFemale,graduationRateWhite,graduationRateBlack,graduationRateHispanic,graduationRateAsian,"
+					+ "graduationRateHawaiian,graduationRateIndian,graduationRateMultiracial,graduationRateLep,graduationRateMigrant,"
+					+ "graduationRateDisabled,graduationRateLowIncome,percentWhite,percentBlack,percentHispanic,percentAsian,"
+					+ "percentHawaiian,percentIndian,percentMultiracial,percentLowIncome,percentLep,percentIep,percentHsDropout,"
+					+ "percentChronicTruancy,percentLowMobility,attendanceRate)"
+					+ "VALUES ( '"
+					+ getName().replace("'", "+char(39)+")
+					+ "',"
+					+ "'"
+					+ getDistrict().replace("'", "+char(39)+")
+					+ "', '"
+					+ getCounty().replace("'", "+char(39)+")
+					+ "', '"
+					+ getSchoolType().replace("'", "+char(39)+")
+					+ "',"
+					+ getTotalEnrollment()
+					+ ","
+					+ getAverageTeacherSalary()
+					+ ","
+					+ getAverageAct()
+					+ ","
+					+ getPercentPassingOverall()
+					+ ","
+					+ getPercentPassingIsat()
+					+ ","
+					+ getPercentPassingPsae()
+					+ ","
+					+ getPercentPassingIaa()
+					+ ","
+					+ getGraduationRateOverall()
+					+ ","
+					+ getGraduationRateMale()
+					+ ","
+					+ getGraduationRateFemale()
+					+ ","
+					+ getGraduationRateWhite()
+					+ ","
+					+ getGraduationRateBlack()
+					+ ","
+					+ getGraduationRateHispanic()
+					+ ","
+					+ getGraduationRateAsian()
+					+ ","
+					+ getGraduationRateHawaiian()
+					+ ","
+					+ getGraduationRateIndian()
+					+ ","
+					+ getGraduationRateMultiracial()
+					+ ","
+					+ getGraduationRateLep()
+					+ ","
+					+ getGraduationRateMigrant()
+					+ ","
+					+ getGraduationRateDisabled()
+					+ ","
+					+ getGraduationRateLowIncome()
+					+ ","
+					+ getPercentWhite()
+					+ ","
+					+ getPercentBlack()
+					+ ","
+					+ getPercentHispanic()
+					+ ","
+					+ getPercentAsian()
+					+ ","
+					+ getPercentHawaiian()
+					+ ","
+					+ getPercentIndian()
+					+ ","
+					+ getPercentMultiracial()
+					+ ","
+					+ getPercentLowIncome()
+					+ ","
+					+ getPercentLep()
+					+ ","
+					+ getPercentIep()
+					+ ","
+					+ getPercentHsDropout()
+					+ ","
+					+ getPercentChronicTruancy()
+					+ ","
+					+ getPercentLowMobility() + "," + getAttendanceRate() + ")";
+			;
 
-			String buildStatement = "INSERT INTO CS442.dbo.School(name,district,county,schoolType,"+
-					"totalEnrollment,averageTeacherSalary,averageAct,percentPassingOverall,"+
-					"percentPassingIsat,percentPassingPsae,percentPassingIaa,graduationRateOverall,graduationRateMale,"+
-					"graduationRateFemale,graduationRateWhite,graduationRateBlack,graduationRateHispanic,graduationRateAsian,"+
-					"graduationRateHawaiian,graduationRateIndian,graduationRateMultiracial,graduationRateLep,graduationRateMigrant,"+
-					"graduationRateDisabled,graduationRateLowIncome,percentWhite,percentBlack,percentHispanic,percentAsian,"+
-					"percentHawaiian,percentIndian,percentMultiracial,percentLowIncome,percentLep,percentIep,percentHsDropout,"+
-					"percentChronicTruancy,percentLowMobility,attendanceRate)"+
-					"VALUES ( '"+getName().replace("'", "+char(39)+")+"',"
-					+ "'" +getDistrict().replace("'", "+char(39)+")+ "', '" +getCounty().replace("'", "+char(39)+")+ "', '" +getSchoolType().replace("'", "+char(39)+")+ "',"+getTotalEnrollment()+","
-					+getAverageTeacherSalary()+","+getAverageAct()+","+getPercentPassingOverall()+","
-					+getPercentPassingIsat()+","+getPercentPassingPsae()+","+getPercentPassingIaa()+","+getGraduationRateOverall()+","
-					+getGraduationRateMale()+","+getGraduationRateFemale()+","+getGraduationRateWhite()+","
-					+getGraduationRateBlack()+","+getGraduationRateHispanic()+","+getGraduationRateAsian()+","
-					+getGraduationRateHawaiian()+","+getGraduationRateIndian()+","+getGraduationRateMultiracial()+","
-					+getGraduationRateLep()+","+getGraduationRateMigrant()+","+getGraduationRateDisabled()+","
-					+getGraduationRateLowIncome()+","+getPercentWhite()+","+getPercentBlack()+","+getPercentHispanic()+","
-					+getPercentAsian()+","+getPercentHawaiian()+","+getPercentIndian()+","+getPercentMultiracial()+","
-					+getPercentLowIncome()+","+getPercentLep()+","+getPercentIep()+","+getPercentHsDropout()+","
-					+getPercentChronicTruancy()+","+getPercentLowMobility()+","+getAttendanceRate()+")";;
-
-					//System.out.println(buildStatement);
-					try {
-						statement.executeUpdate(buildStatement);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			// System.out.println(buildStatement);
+			try {
+				statement.executeUpdate(buildStatement);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -410,47 +475,48 @@ public class School{
 		}
 
 	}
-	
+
 	public static HashMap<String, String> getMap() {
 		HashMap<String, String> schoolMap = new HashMap<String, String>();
-		
+
 		schoolMap.put("totalEnrollment", "Total Enrollment");
 		schoolMap.put("averageTeacherSalary", " Average Teacher Salary");
-		schoolMap.put("averageAct","Average ACT");
-		schoolMap.put("percentPassingOverall","Overall Passing Percentage");
-		schoolMap.put("percentPassingIsat","ISAT Passing Percentage");
-		schoolMap.put("percentPassingPsae","PSAE Passing Percentage");
-		schoolMap.put("percentPassingIaa","IAA Passing Percentage");
-		schoolMap.put("graduationRateOverall","Overall Graduation Rate");
-		schoolMap.put("graduationRateMale","Graduation Rate: Male");
-		schoolMap.put("graduationRateFemale","Graduation Rate: Female");
-		schoolMap.put("graduationRateWhite","Graduation Rate: White");
-		schoolMap.put("graduationRateBlack","Graduation Rate: Black");
-		schoolMap.put("graduationRateHispanic","Graduation Rate: Hispanic");
-		schoolMap.put("graduationRateAsian","Graduation Rate: Asian");
-		schoolMap.put("graduationRateHawaiian","Graduation Rate: Hawaiian");
-		schoolMap.put("graduationRateIndian","Graduation Rate: Indian");
-		schoolMap.put("graduationRateMultiracial","Graduation Rate: Multi Racial");
-		schoolMap.put("graduationRateLep","Graduation Rate: LEP");
-		schoolMap.put("graduationRateMigrant","Graduation Rate: Migrant");
-		schoolMap.put("graduationRateDisabled","Graduation Rate: Disabled");
-		schoolMap.put("graduationRateLowIncome","Graduation Rate: Low Income");
-		schoolMap.put("percentWhite","Percent: White");
-		schoolMap.put("percentBlack","Percent: Black");
-		schoolMap.put("percentHispanic","Percent: Hispanic");
-		schoolMap.put("percentAsian","Percent: Asian");
-		schoolMap.put("percentHawaiian","Percent: Hawaiian");
-		schoolMap.put("percentIndian","Percent: Indian");
-		schoolMap.put("percentMultiracial","Percent: Multi Racial");
-		schoolMap.put("percentLowIncome","Percent: Low Income");
-		schoolMap.put("percentLep","Percent: LEP");
-		schoolMap.put("percentIep","Percent:  IEP");
-		schoolMap.put("percentHsDropout","Percent: HS Dropouts");
-		schoolMap.put("percentChronicTruancy","Percent: Chronic Truancy");
-		schoolMap.put("percentLowMobility","Percent: Low Mobility");
-		schoolMap.put("attendanceRate","Attendance Rate");
-		
+		schoolMap.put("averageAct", "Average ACT");
+		schoolMap.put("percentPassingOverall", "Overall Passing Percentage");
+		schoolMap.put("percentPassingIsat", "ISAT Passing Percentage");
+		schoolMap.put("percentPassingPsae", "PSAE Passing Percentage");
+		schoolMap.put("percentPassingIaa", "IAA Passing Percentage");
+		schoolMap.put("graduationRateOverall", "Overall Graduation Rate");
+		schoolMap.put("graduationRateMale", "Graduation Rate: Male");
+		schoolMap.put("graduationRateFemale", "Graduation Rate: Female");
+		schoolMap.put("graduationRateWhite", "Graduation Rate: White");
+		schoolMap.put("graduationRateBlack", "Graduation Rate: Black");
+		schoolMap.put("graduationRateHispanic", "Graduation Rate: Hispanic");
+		schoolMap.put("graduationRateAsian", "Graduation Rate: Asian");
+		schoolMap.put("graduationRateHawaiian", "Graduation Rate: Hawaiian");
+		schoolMap.put("graduationRateIndian", "Graduation Rate: Indian");
+		schoolMap.put("graduationRateMultiracial",
+				"Graduation Rate: Multi Racial");
+		schoolMap.put("graduationRateLep", "Graduation Rate: LEP");
+		schoolMap.put("graduationRateMigrant", "Graduation Rate: Migrant");
+		schoolMap.put("graduationRateDisabled", "Graduation Rate: Disabled");
+		schoolMap.put("graduationRateLowIncome", "Graduation Rate: Low Income");
+		schoolMap.put("percentWhite", "Percent: White");
+		schoolMap.put("percentBlack", "Percent: Black");
+		schoolMap.put("percentHispanic", "Percent: Hispanic");
+		schoolMap.put("percentAsian", "Percent: Asian");
+		schoolMap.put("percentHawaiian", "Percent: Hawaiian");
+		schoolMap.put("percentIndian", "Percent: Indian");
+		schoolMap.put("percentMultiracial", "Percent: Multi Racial");
+		schoolMap.put("percentLowIncome", "Percent: Low Income");
+		schoolMap.put("percentLep", "Percent: LEP");
+		schoolMap.put("percentIep", "Percent:  IEP");
+		schoolMap.put("percentHsDropout", "Percent: HS Dropouts");
+		schoolMap.put("percentChronicTruancy", "Percent: Chronic Truancy");
+		schoolMap.put("percentLowMobility", "Percent: Low Mobility");
+		schoolMap.put("attendanceRate", "Attendance Rate");
+
 		return schoolMap;
 	}
-	
+
 }

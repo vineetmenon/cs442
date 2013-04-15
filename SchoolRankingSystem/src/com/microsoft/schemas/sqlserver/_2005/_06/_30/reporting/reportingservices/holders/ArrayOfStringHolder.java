@@ -8,13 +8,13 @@
 package com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.holders;
 
 public final class ArrayOfStringHolder implements javax.xml.rpc.holders.Holder {
-    public java.lang.String[] value;
+	public java.lang.String[] value;
 
-    public ArrayOfStringHolder() {
-    }
+	public ArrayOfStringHolder() {
+	}
 
-    public ArrayOfStringHolder(java.lang.String[] value) {
-        this.value = value;
-    }
+	public ArrayOfStringHolder(java.lang.String[] value) {
+		this.value = value;
+	}
 
 }

@@ -9,12 +9,14 @@ package com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservice
 
 public interface ReportExecutionService extends javax.xml.rpc.Service {
 
-/**
- * The Reporting Services Execution Service enables report execution
- */
-    public java.lang.String getReportExecutionServiceSoapAddress();
+	/**
+	 * The Reporting Services Execution Service enables report execution
+	 */
+	public java.lang.String getReportExecutionServiceSoapAddress();
 
-    public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ReportExecutionServiceSoap getReportExecutionServiceSoap() throws javax.xml.rpc.ServiceException;
+	public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ReportExecutionServiceSoap getReportExecutionServiceSoap()
+			throws javax.xml.rpc.ServiceException;
 
-    public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ReportExecutionServiceSoap getReportExecutionServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+	public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ReportExecutionServiceSoap getReportExecutionServiceSoap(
+			java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

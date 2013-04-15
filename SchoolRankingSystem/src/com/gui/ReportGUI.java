@@ -37,7 +37,7 @@ public class ReportGUI extends javax.swing.JFrame {
 	private String schoolList;
 
 	private Map<String, String> reportParametersMap;
-	private Map<String,String> schoolNameMap;
+	private Map<String, String> schoolNameMap;
 
 	public String getReportType() {
 		return reportType;
@@ -71,17 +71,17 @@ public class ReportGUI extends javax.swing.JFrame {
 		this.reportParametersMap = reportParameters;
 	}
 
-	public Map<String,String> getSchoolNameMap() {
+	public Map<String, String> getSchoolNameMap() {
 		return schoolNameMap;
 	}
 
-	public void setSchoolNameMap(Map<String,String> schoolNameMap) {
+	public void setSchoolNameMap(Map<String, String> schoolNameMap) {
 		this.schoolNameMap = schoolNameMap;
 	}
 
 	/** Creates new form ReportGUI */
 	public ReportGUI() {
-		//initComponents();
+		// initComponents();
 	}
 
 	/**
@@ -110,23 +110,23 @@ public class ReportGUI extends javax.swing.JFrame {
 			reportParameters.add(reportParametersValuesList.get(i));
 		}
 
-		for(int i=0; i< schoolNameValuesList.size(); i++) {
+		for (int i = 0; i < schoolNameValuesList.size(); i++) {
 			schoolName.add(schoolNameValuesList.get(i));
 		}
 
 		schoolNamesList = new javax.swing.JList(schoolName);
 		schoolNamesList
-		.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		reportParametersList = new javax.swing.JList(reportParameters);
 		reportParametersList
-		.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// Populate Graph Type Box
 		parameterComboBox = new javax.swing.JComboBox();
 		parameterComboBox.setModel(new javax.swing.DefaultComboBoxModel(
 				new String[] { "Choose Type", "Bar Graph", "Pie Chart",
-				"Scatter Plot" }));
+						"Scatter Plot" }));
 
 		reportTypeLabel = new javax.swing.JLabel();
 		parameterLabel = new javax.swing.JLabel();
@@ -161,182 +161,182 @@ public class ReportGUI extends javax.swing.JFrame {
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
 						layout.createSequentialGroup().addGap(162, 162, 162)
-						.addComponent(bannerLabel)
-						.addContainerGap(206, Short.MAX_VALUE))
-						.addGroup(
-								javax.swing.GroupLayout.Alignment.TRAILING,
-								layout.createSequentialGroup()
+								.addComponent(bannerLabel)
+								.addContainerGap(206, Short.MAX_VALUE))
+				.addGroup(
+						javax.swing.GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup()
 								.addGroup(
 										layout.createParallelGroup(
 												javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(
 														layout.createSequentialGroup()
-														.addContainerGap()
-														.addGroup(
-																layout.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																		.addComponent(
-																				reportTypeLabel)
+																.addContainerGap()
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(
+																						reportTypeLabel)
 																				.addComponent(
 																						parameterLabel))
-																						.addGap(61, 61,
-																								61))
+																.addGap(61, 61,
+																		61))
+												.addGroup(
+														layout.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.LEADING)
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addContainerGap()
+																				.addComponent(
+																						schoolLabel)
+																				.addGap(21,
+																						21,
+																						21))
+																.addGroup(
+																		javax.swing.GroupLayout.Alignment.TRAILING,
+																		layout.createSequentialGroup()
+																				.addContainerGap(
+																						62,
+																						Short.MAX_VALUE)
+																				.addGroup(
+																						layout.createParallelGroup(
+																								javax.swing.GroupLayout.Alignment.TRAILING,
+																								false)
+																								.addComponent(
+																										clearButton,
+																										javax.swing.GroupLayout.Alignment.LEADING,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										Short.MAX_VALUE)
+																								.addComponent(
+																										generateReportButton,
+																										javax.swing.GroupLayout.Alignment.LEADING,
+																										javax.swing.GroupLayout.DEFAULT_SIZE,
+																										172,
+																										Short.MAX_VALUE))
+																				.addPreferredGap(
+																						javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGroup(
+																		layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.TRAILING)
+																				.addGroup(
+																						javax.swing.GroupLayout.Alignment.LEADING,
+																						layout.createSequentialGroup()
+																								.addGap(90,
+																										90,
+																										90)
 																								.addGroup(
 																										layout.createParallelGroup(
-																												javax.swing.GroupLayout.Alignment.LEADING)
-																												.addGroup(
-																														layout.createSequentialGroup()
-																														.addContainerGap()
-																														.addComponent(
-																																schoolLabel)
-																																.addGap(21,
-																																		21,
-																																		21))
-																																		.addGroup(
-																																				javax.swing.GroupLayout.Alignment.TRAILING,
-																																				layout.createSequentialGroup()
-																																				.addContainerGap(
-																																						62,
-																																						Short.MAX_VALUE)
-																																						.addGroup(
-																																								layout.createParallelGroup(
-																																										javax.swing.GroupLayout.Alignment.TRAILING,
-																																										false)
-																																										.addComponent(
-																																												clearButton,
-																																												javax.swing.GroupLayout.Alignment.LEADING,
-																																												javax.swing.GroupLayout.DEFAULT_SIZE,
-																																												javax.swing.GroupLayout.DEFAULT_SIZE,
-																																												Short.MAX_VALUE)
-																																												.addComponent(
-																																														generateReportButton,
-																																														javax.swing.GroupLayout.Alignment.LEADING,
-																																														javax.swing.GroupLayout.DEFAULT_SIZE,
-																																														172,
-																																														Short.MAX_VALUE))
-																																														.addPreferredGap(
-																																																javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
-																																																.addGroup(
-																																																		layout.createParallelGroup(
-																																																				javax.swing.GroupLayout.Alignment.LEADING)
-																																																				.addGroup(
-																																																						layout.createSequentialGroup()
-																																																						.addGroup(
-																																																								layout.createParallelGroup(
-																																																										javax.swing.GroupLayout.Alignment.TRAILING)
-																																																										.addGroup(
-																																																												javax.swing.GroupLayout.Alignment.LEADING,
-																																																												layout.createSequentialGroup()
-																																																												.addGap(90,
-																																																														90,
-																																																														90)
-																																																														.addGroup(
-																																																																layout.createParallelGroup(
-																																																																		javax.swing.GroupLayout.Alignment.TRAILING,
-																																																																		false)
-																																																																		.addComponent(
-																																																																				exitButton,
-																																																																				javax.swing.GroupLayout.Alignment.LEADING,
-																																																																				javax.swing.GroupLayout.DEFAULT_SIZE,
-																																																																				javax.swing.GroupLayout.DEFAULT_SIZE,
-																																																																				Short.MAX_VALUE)
-																																																																				.addComponent(
-																																																																						updateDataButton,
-																																																																						javax.swing.GroupLayout.Alignment.LEADING,
-																																																																						javax.swing.GroupLayout.DEFAULT_SIZE,
-																																																																						159,
-																																																																						Short.MAX_VALUE))
-																																																																						.addGap(20,
-																																																																								20,
-																																																																								20))
-																																																																								.addComponent(
-																																																																										reportTypeListPane,
-																																																																										javax.swing.GroupLayout.Alignment.LEADING,
-																																																																										javax.swing.GroupLayout.DEFAULT_SIZE,
-																																																																										269,
-																																																																										Short.MAX_VALUE)
-																																																																										.addComponent(
-																																																																												parameterComboBox,
-																																																																												javax.swing.GroupLayout.Alignment.LEADING,
-																																																																												0,
-																																																																												269,
-																																																																												Short.MAX_VALUE))
-																																																																												.addGap(31, 31,
-																																																																														31))
-																																																																														.addGroup(
-																																																																																layout.createSequentialGroup()
-																																																																																.addComponent(
-																																																																																		schoolNameListPane,
-																																																																																		javax.swing.GroupLayout.DEFAULT_SIZE,
-																																																																																		290,
-																																																																																		Short.MAX_VALUE)
-																																																																																		.addContainerGap()))));
+																												javax.swing.GroupLayout.Alignment.TRAILING,
+																												false)
+																												.addComponent(
+																														exitButton,
+																														javax.swing.GroupLayout.Alignment.LEADING,
+																														javax.swing.GroupLayout.DEFAULT_SIZE,
+																														javax.swing.GroupLayout.DEFAULT_SIZE,
+																														Short.MAX_VALUE)
+																												.addComponent(
+																														updateDataButton,
+																														javax.swing.GroupLayout.Alignment.LEADING,
+																														javax.swing.GroupLayout.DEFAULT_SIZE,
+																														159,
+																														Short.MAX_VALUE))
+																								.addGap(20,
+																										20,
+																										20))
+																				.addComponent(
+																						reportTypeListPane,
+																						javax.swing.GroupLayout.Alignment.LEADING,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						269,
+																						Short.MAX_VALUE)
+																				.addComponent(
+																						parameterComboBox,
+																						javax.swing.GroupLayout.Alignment.LEADING,
+																						0,
+																						269,
+																						Short.MAX_VALUE))
+																.addGap(31, 31,
+																		31))
+												.addGroup(
+														layout.createSequentialGroup()
+																.addComponent(
+																		schoolNameListPane,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		290,
+																		Short.MAX_VALUE)
+																.addContainerGap()))));
 		layout.setVerticalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(
 						layout.createSequentialGroup()
-						.addGap(25, 25, 25)
-						.addComponent(bannerLabel)
-						.addGroup(
-								layout.createParallelGroup(
-										javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(
-												layout.createSequentialGroup()
-												.addGap(88, 88,
-														88)
-														.addComponent(
-																schoolLabel))
-																.addGroup(
-																		layout.createSequentialGroup()
-																		.addGap(40, 40,
-																				40)
-																				.addComponent(
-																						schoolNameListPane,
-																						javax.swing.GroupLayout.PREFERRED_SIZE,
-																						javax.swing.GroupLayout.DEFAULT_SIZE,
-																						javax.swing.GroupLayout.PREFERRED_SIZE)))
-																						.addGap(51, 51, 51)
-																						.addGroup(
-																								layout.createParallelGroup(
-																										javax.swing.GroupLayout.Alignment.BASELINE)
-																										.addComponent(
-																												parameterComboBox,
-																												javax.swing.GroupLayout.PREFERRED_SIZE,
-																												javax.swing.GroupLayout.DEFAULT_SIZE,
-																												javax.swing.GroupLayout.PREFERRED_SIZE)
-																												.addComponent(reportTypeLabel))
-																												.addGroup(
-																														layout.createParallelGroup(
-																																javax.swing.GroupLayout.Alignment.LEADING)
-																																.addGroup(
-																																		layout.createSequentialGroup()
-																																		.addGap(96, 96,
-																																				96)
-																																				.addComponent(
-																																						parameterLabel))
-																																						.addGroup(
-																																								layout.createSequentialGroup()
-																																								.addGap(39, 39,
-																																										39)
-																																										.addComponent(
-																																												reportTypeListPane,
-																																												javax.swing.GroupLayout.PREFERRED_SIZE,
-																																												javax.swing.GroupLayout.DEFAULT_SIZE,
-																																												javax.swing.GroupLayout.PREFERRED_SIZE)))
-																																												.addGap(71, 71, 71)
-																																												.addGroup(
-																																														layout.createParallelGroup(
-																																																javax.swing.GroupLayout.Alignment.BASELINE)
-																																																.addComponent(
-																																																		generateReportButton)
-																																																		.addComponent(updateDataButton))
-																																																		.addGap(27, 27, 27)
-																																																		.addGroup(
-																																																				layout.createParallelGroup(
-																																																						javax.swing.GroupLayout.Alignment.BASELINE)
-																																																						.addComponent(clearButton)
-																																																						.addComponent(exitButton))
-																																																						.addGap(94, 94, 94)));
+								.addGap(25, 25, 25)
+								.addComponent(bannerLabel)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGap(88, 88,
+																		88)
+																.addComponent(
+																		schoolLabel))
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGap(40, 40,
+																		40)
+																.addComponent(
+																		schoolNameListPane,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)))
+								.addGap(51, 51, 51)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(
+														parameterComboBox,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(reportTypeLabel))
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGap(96, 96,
+																		96)
+																.addComponent(
+																		parameterLabel))
+												.addGroup(
+														layout.createSequentialGroup()
+																.addGap(39, 39,
+																		39)
+																.addComponent(
+																		reportTypeListPane,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)))
+								.addGap(71, 71, 71)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(
+														generateReportButton)
+												.addComponent(updateDataButton))
+								.addGap(27, 27, 27)
+								.addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(clearButton)
+												.addComponent(exitButton))
+								.addGap(94, 94, 94)));
 
 		// Make Entire App Screen Viewable
 		pack();
@@ -380,10 +380,9 @@ public class ReportGUI extends javax.swing.JFrame {
 
 		Object[] chosenSchoolsList = null;
 		chosenSchoolsList = schoolNamesList.getSelectedValues(); // get list of
-		
 
 		for (int x = 0; x < chosenSchoolsList.length; x++) {
-			
+
 			String key = getKeyByValue(schoolNameMap,
 					chosenSchoolsList[x].toString());
 			if (key != null) {
@@ -398,10 +397,10 @@ public class ReportGUI extends javax.swing.JFrame {
 		System.out.println("id list " + schoolList);
 		if (chosenSchoolsList.length == 0) {
 			JOptionPane
-			.showMessageDialog(
-					this,
-					"You must pick at least 1 school before generating a report.",
-					"Generate Report Error", JOptionPane.ERROR_MESSAGE);
+					.showMessageDialog(
+							this,
+							"You must pick at least 1 school before generating a report.",
+							"Generate Report Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		// Handle Chosen Parameters Here
@@ -414,8 +413,8 @@ public class ReportGUI extends javax.swing.JFrame {
 			for (int x = 0; x < chosenParametersList.length; x++) {
 				String key = getKeyByValue(reportParametersMap,
 						chosenParametersList[x].toString());
-				if (key != null ) {
-					if(parameterList == null) {
+				if (key != null) {
+					if (parameterList == null) {
 						parameterList = key + ",";
 					} else {
 						parameterList = parameterList + key + ",";
@@ -429,25 +428,25 @@ public class ReportGUI extends javax.swing.JFrame {
 		} else {
 			if ((reportType == "Bar Graph")) {
 				JOptionPane
-				.showMessageDialog(
-						this,
-						"You must pick at least 1 parameter before generating a Bar Graph report.",
-						"Generate Report Error",
-						JOptionPane.ERROR_MESSAGE);
+						.showMessageDialog(
+								this,
+								"You must pick at least 1 parameter before generating a Bar Graph report.",
+								"Generate Report Error",
+								JOptionPane.ERROR_MESSAGE);
 			} else if (reportType == "Pie Chart") {
 				JOptionPane
-				.showMessageDialog(
-						this,
-						"You must pick only 1 parameter before generating a Pie Chart report.",
-						"Generate Report Error",
-						JOptionPane.ERROR_MESSAGE);
+						.showMessageDialog(
+								this,
+								"You must pick only 1 parameter before generating a Pie Chart report.",
+								"Generate Report Error",
+								JOptionPane.ERROR_MESSAGE);
 			} else if (reportType == "Scatter Plot") {
 				JOptionPane
-				.showMessageDialog(
-						this,
-						"You must pick only 2 parameter before generating a Scatter Plot report.",
-						"Generate Report Error",
-						JOptionPane.ERROR_MESSAGE);
+						.showMessageDialog(
+								this,
+								"You must pick only 2 parameter before generating a Scatter Plot report.",
+								"Generate Report Error",
+								JOptionPane.ERROR_MESSAGE);
 			}
 
 			return false;
@@ -460,9 +459,14 @@ public class ReportGUI extends javax.swing.JFrame {
 		schoolNamesList.clearSelection();
 		parameterComboBox.setSelectedIndex(0);
 		reportParametersList.clearSelection();
-		reportType=null;
-		schoolList=null;
-		parameterList=null;
+		reportType = null;
+		schoolList = null;
+		parameterList = null;
+	}
+
+	public void refreshSchoolList() {
+		schoolNamesList.setListData(schoolNameMap.values().toArray());
+		schoolNamesList.repaint();
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

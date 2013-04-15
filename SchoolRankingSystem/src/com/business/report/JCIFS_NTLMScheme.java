@@ -2,8 +2,6 @@ package com.business.report;
 
 import java.io.IOException;
 
- 
-
 import org.apache.commons.httpclient.Credentials;
 
 import org.apache.commons.httpclient.HttpMethod;
@@ -19,438 +17,392 @@ import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 
 import org.apache.commons.httpclient.auth.MalformedChallengeException;
- 
+
 /**
-
+ * 
  * This is a reimplementation of HTTPClient 3.x's
-
+ * 
  * org.apache.commons.httpclient.auth.NTLMScheme.<BR/>
-
+ * 
  * It will basically use JCIFS (v1.3.15) in order to provide added support for
-
+ * 
  * NTLMv2 (instead of trying to create its own Type, 2 and 3 messages). <BR/>
-
+ * 
  * This class has to be registered manually with HTTPClient before setting
-
+ * 
  * NTCredentials: AuthPolicy.registerAuthScheme(AuthPolicy.NTLM,
-
+ * 
  * JCIFS_NTLMScheme.class); <BR/>
-
- * Will <B>not</B> work with HttpClient 4.x which requires AuthEngine to be overriden instead of AuthScheme.
-
- *
-
+ * 
+ * Will <B>not</B> work with HttpClient 4.x which requires AuthEngine to be
+ * overriden instead of AuthScheme.
+ * 
+ * 
+ * 
  * @author Sachin M
-
  */
 
 public class JCIFS_NTLMScheme implements AuthScheme {
 
- 
+	// private static AppLogger logger = new
+	// AppLogger(HTTPHelper.class.getName());
 
-      // private static AppLogger logger = new AppLogger(HTTPHelper.class.getName());
+	/** NTLM challenge string. */
 
- 
+	private String ntlmchallenge = null;
 
-       /** NTLM challenge string. */
+	private static final int UNINITIATED = 0;
 
-       private String ntlmchallenge = null;
+	private static final int INITIATED = 1;
 
- 
+	private static final int TYPE1_MSG_GENERATED = 2;
 
-       private static final int UNINITIATED = 0;
+	private static final int TYPE2_MSG_RECEIVED = 3;
 
-       private static final int INITIATED = 1;
+	private static final int TYPE3_MSG_GENERATED = 4;
 
-       private static final int TYPE1_MSG_GENERATED = 2;
+	private static final int FAILED = Integer.MAX_VALUE;
 
-       private static final int TYPE2_MSG_RECEIVED = 3;
+	/** Authentication process state */
 
-       private static final int TYPE3_MSG_GENERATED = 4;
+	private int state;
 
-       private static final int FAILED = Integer.MAX_VALUE;
+	public JCIFS_NTLMScheme() throws AuthenticationException {
 
- 
+		// Check if JCIFS is present. If not present, do not proceed.
 
-       /** Authentication process state */
+		try {
 
-       private int state;
+			Class.forName("jcifs.ntlmssp.NtlmMessage", false, this.getClass()
+					.getClassLoader());
 
- 
+		} catch (ClassNotFoundException e) {
 
-       public JCIFS_NTLMScheme() throws AuthenticationException {
+			throw new AuthenticationException(
+					"Unable to proceed as JCIFS library is not found.");
 
-              // Check if JCIFS is present. If not present, do not proceed.
+		}
 
-              try {
+	}
 
-                     Class.forName("jcifs.ntlmssp.NtlmMessage",false,this.getClass().getClassLoader());
+	public String authenticate(Credentials credentials, HttpMethod method)
 
-              } catch (ClassNotFoundException e) {
+	throws AuthenticationException {
 
-                     throw new AuthenticationException("Unable to proceed as JCIFS library is not found.");
+		/*
+		 * logger.doLog(AppLogger.FINEST,
+		 * 
+		 * "Enter JCIFS_NTLMScheme.authenticate(Credentials, HttpMethod)",
+		 * 
+		 * null);
+		 */
 
-              }
+		if (this.state == UNINITIATED) {
 
-       }
+			throw new IllegalStateException(
 
-      
+			"NTLM authentication process has not been initiated");
 
-       public String authenticate(Credentials credentials, HttpMethod method)
+		}
 
-                     throws AuthenticationException {
+		NTCredentials ntcredentials = null;
 
-              /*logger.doLog(AppLogger.FINEST,
+		try {
 
-                           "Enter JCIFS_NTLMScheme.authenticate(Credentials, HttpMethod)",
+			ntcredentials = (NTCredentials) credentials;
 
-                           null);*/
+		} catch (ClassCastException e) {
 
- 
+			throw new InvalidCredentialsException(
 
-              if (this.state == UNINITIATED) {
+			"Credentials cannot be used for NTLM authentication: "
 
-                     throw new IllegalStateException(
+			+ credentials.getClass().getName());
 
-                                  "NTLM authentication process has not been initiated");
+		}
 
-              }
+		NTLM ntlm = new NTLM();
 
- 
+		ntlm.setCredentialCharset(method.getParams().getCredentialCharset());
 
-              NTCredentials ntcredentials = null;
+		String response = null;
 
-              try {
+		if (this.state == INITIATED || this.state == FAILED) {
 
-                     ntcredentials = (NTCredentials) credentials;
+			response = ntlm.generateType1Msg(ntcredentials.getHost(),
 
-              } catch (ClassCastException e) {
+			ntcredentials.getDomain());
 
-                     throw new InvalidCredentialsException(
+			this.state = TYPE1_MSG_GENERATED;
 
-                                  "Credentials cannot be used for NTLM authentication: "
+		} else {
 
-                                                + credentials.getClass().getName());
+			response = ntlm.generateType3Msg(ntcredentials.getUserName(),
 
-              }
+			ntcredentials.getPassword(), ntcredentials.getHost(),
 
-             
+			ntcredentials.getDomain(), this.ntlmchallenge);
 
-              NTLM ntlm = new NTLM();
+			this.state = TYPE3_MSG_GENERATED;
 
-              ntlm.setCredentialCharset(method.getParams().getCredentialCharset());
+		}
 
-              String response = null;
+		return "NTLM " + response;
 
-              if (this.state == INITIATED || this.state == FAILED) {
+	}
 
-                     response = ntlm.generateType1Msg(ntcredentials.getHost(),
+	public String authenticate(Credentials credentials, String method,
 
-                                  ntcredentials.getDomain());
+	String uri) throws AuthenticationException {
 
-                     this.state = TYPE1_MSG_GENERATED;
+		throw new RuntimeException(
 
-              } else {
+		"Not implemented as it is deprecated anyway in Httpclient 3.x");
 
-                     response = ntlm.generateType3Msg(ntcredentials.getUserName(),
+	}
 
-                                  ntcredentials.getPassword(), ntcredentials.getHost(),
+	public String getID() {
 
-                                  ntcredentials.getDomain(), this.ntlmchallenge);
+		throw new RuntimeException(
 
-                     this.state = TYPE3_MSG_GENERATED;
+		"Not implemented as it is deprecated anyway in Httpclient 3.x");
 
-              }
+	}
 
-              return "NTLM " + response;
+	/**
+	 * 
+	 * Returns the authentication parameter with the given name, if available.
+	 * 
+	 * 
+	 * 
+	 * <p>
+	 * 
+	 * There are no valid parameters for NTLM authentication so this method
+	 * 
+	 * always returns <tt>null</tt>.
+	 * 
+	 * </p>
+	 * 
+	 * 
+	 * 
+	 * @param name
+	 * 
+	 *            The name of the parameter to be returned
+	 * 
+	 * 
+	 * 
+	 * @return the parameter with the given name
+	 */
+
+	public String getParameter(String name) {
+
+		if (name == null) {
+
+			throw new IllegalArgumentException("Parameter name may not be null");
+
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * 
+	 * The concept of an authentication realm is not supported by the NTLM
+	 * 
+	 * authentication scheme. Always returns <code>null</code>.
+	 * 
+	 * 
+	 * 
+	 * @return <code>null</code>
+	 */
 
- 
+	public String getRealm() {
 
-       }
+		return null;
 
- 
+	}
 
-       public String authenticate(Credentials credentials, String method,
+	/**
+	 * 
+	 * Returns textual designation of the NTLM authentication scheme.
+	 * 
+	 * 
+	 * 
+	 * @return <code>ntlm</code>
+	 */
 
-                     String uri) throws AuthenticationException {
+	public String getSchemeName() {
 
-              throw new RuntimeException(
+		return "ntlm";
 
-                           "Not implemented as it is deprecated anyway in Httpclient 3.x");
+	}
 
-       }
+	/**
+	 * 
+	 * Tests if the NTLM authentication process has been completed.
+	 * 
+	 * 
+	 * 
+	 * @return <tt>true</tt> if Basic authorization has been processed,
+	 * 
+	 *         <tt>false</tt> otherwise.
+	 * 
+	 * 
+	 * 
+	 * @since 3.0
+	 */
 
- 
+	public boolean isComplete() {
 
-       public String getID() {
+		return this.state == TYPE3_MSG_GENERATED || this.state == FAILED;
 
-              throw new RuntimeException(
+	}
 
-                           "Not implemented as it is deprecated anyway in Httpclient 3.x");
+	/**
+	 * 
+	 * Returns <tt>true</tt>. NTLM authentication scheme is connection based.
+	 * 
+	 * 
+	 * 
+	 * @return <tt>true</tt>.
+	 * 
+	 * 
+	 * 
+	 * @since 3.0
+	 */
 
-       }
+	public boolean isConnectionBased() {
 
- 
+		return true;
 
-       /**
+	}
 
-        * Returns the authentication parameter with the given name, if available.
+	/**
+	 * 
+	 * Processes the NTLM challenge.
+	 * 
+	 * 
+	 * 
+	 * @param challenge
+	 * 
+	 *            the challenge string
+	 * 
+	 * 
+	 * 
+	 * @throws MalformedChallengeException
+	 * 
+	 *             is thrown if the authentication challenge is malformed
+	 * 
+	 * 
+	 * 
+	 * @since 3.0
+	 */
 
-        *
+	public void processChallenge(final String challenge)
 
-        * <p>
+	throws MalformedChallengeException {
 
-        * There are no valid parameters for NTLM authentication so this method
+		String s = AuthChallengeParser.extractScheme(challenge);
 
-        * always returns <tt>null</tt>.
+		if (!s.equalsIgnoreCase(getSchemeName())) {
 
-        * </p>
+			throw new MalformedChallengeException("Invalid NTLM challenge: "
 
-        *
+			+ challenge);
 
-        * @param name
+		}
 
-        *            The name of the parameter to be returned
+		int i = challenge.indexOf(' ');
 
-        *
+		if (i != -1) {
 
-        * @return the parameter with the given name
+			s = challenge.substring(i, challenge.length());
 
-        */
+			this.ntlmchallenge = s.trim();
 
-       public String getParameter(String name) {
+			this.state = TYPE2_MSG_RECEIVED;
 
-              if (name == null) {
+		} else {
 
-                     throw new IllegalArgumentException("Parameter name may not be null");
+			this.ntlmchallenge = "";
 
-              }
+			if (this.state == UNINITIATED) {
 
-              return null;
+				this.state = INITIATED;
 
-       }
+			} else {
 
- 
+				this.state = FAILED;
 
-       /**
+			}
 
-        * The concept of an authentication realm is not supported by the NTLM
+		}
 
-        * authentication scheme. Always returns <code>null</code>.
+	}
 
-        *
+	private class NTLM {
 
-        * @return <code>null</code>
+		/** Character encoding */
 
-        */
+		public static final String DEFAULT_CHARSET = "ASCII";
 
-       public String getRealm() {
+		/**
+		 * 
+		 * The character was used by 3.x's NTLM to encode the username and
+		 * 
+		 * password. Apparently, this is not needed in when passing username,
+		 * 
+		 * password from NTCredentials to the JCIFS library
+		 */
 
-              return null;
-
-       }
-
- 
-
-       /**
-
-        * Returns textual designation of the NTLM authentication scheme.
-
-        *
-
-        * @return <code>ntlm</code>
-
-        */
-
-       public String getSchemeName() {
-
-              return "ntlm";
-
-       }
-
- 
-
-       /**
-
-        * Tests if the NTLM authentication process has been completed.
-
-        *
-
-        * @return <tt>true</tt> if Basic authorization has been processed,
-
-        *         <tt>false</tt> otherwise.
-
-        *
-
-        * @since 3.0
-
-        */
-
-       public boolean isComplete() {
-
-              return this.state == TYPE3_MSG_GENERATED || this.state == FAILED;
-
-       }
-
- 
-
-       /**
-
-        * Returns <tt>true</tt>. NTLM authentication scheme is connection based.
-
-        *
-
-        * @return <tt>true</tt>.
-
-        *
-
-        * @since 3.0
-
-        */
-
-       public boolean isConnectionBased() {
-
-              return true;
-
-       }
-
- 
-
-       /**
-
-        * Processes the NTLM challenge.
-
-        *
-
-        * @param challenge
-
-        *            the challenge string
-
-        *
-
-        * @throws MalformedChallengeException
-
-        *             is thrown if the authentication challenge is malformed
-
-        *
-
-        * @since 3.0
-
-        */
-
-       public void processChallenge(final String challenge)
-
-                     throws MalformedChallengeException {
-
-              String s = AuthChallengeParser.extractScheme(challenge);
-
-              if (!s.equalsIgnoreCase(getSchemeName())) {
-
-                     throw new MalformedChallengeException("Invalid NTLM challenge: "
-
-                                  + challenge);
-
-              }
-
-              int i = challenge.indexOf(' ');
-
-              if (i != -1) {
-
-                     s = challenge.substring(i, challenge.length());
-
-                     this.ntlmchallenge = s.trim();
-
-                     this.state = TYPE2_MSG_RECEIVED;
-
-              } else {
-
-                     this.ntlmchallenge = "";
-
-                     if (this.state == UNINITIATED) {
-
-                           this.state = INITIATED;
-
-                     } else {
-
-                           this.state = FAILED;
-
-                     }
-
-              }
-
-       }
-
- 
-
-       private class NTLM {
-
-           /** Character encoding */
-
-           public static final String DEFAULT_CHARSET = "ASCII";
-
-          
-
-           /**
-
-               * The character was used by 3.x's NTLM to encode the username and
-
-               * password. Apparently, this is not needed in when passing username,
-
-               * password from NTCredentials to the JCIFS library
-
-               */
-
-           @SuppressWarnings("unused")
+		@SuppressWarnings("unused")
 		private String credentialCharset = DEFAULT_CHARSET;
 
-          
+		void setCredentialCharset(String credentialCharset) {
 
-              void setCredentialCharset(String credentialCharset) {
+			this.credentialCharset = credentialCharset;
 
-                     this.credentialCharset = credentialCharset;
+		}
 
-              }
+		private String generateType1Msg(String host, String domain) {
 
- 
+			jcifs.ntlmssp.Type1Message t1m = new jcifs.ntlmssp.Type1Message(
+					jcifs.ntlmssp.Type1Message.getDefaultFlags(),
 
-              private String generateType1Msg(String host, String domain) {
+					domain, host);
 
-                     jcifs.ntlmssp.Type1Message t1m = new jcifs.ntlmssp.Type1Message(jcifs.ntlmssp.Type1Message.getDefaultFlags(),
+			return jcifs.util.Base64.encode(t1m.toByteArray());
 
-                                  domain, host);
+		}
 
-                     return jcifs.util.Base64.encode(t1m.toByteArray());
+		private String generateType3Msg(String username, String password,
+				String host,
 
-              }
+				String domain, String challenge) {
 
- 
+			jcifs.ntlmssp.Type2Message t2m;
 
-              private String generateType3Msg(String username, String password, String host,
+			try {
 
-                           String domain, String challenge) {
+				t2m = new jcifs.ntlmssp.Type2Message(
+						jcifs.util.Base64.decode(challenge));
 
-                     jcifs.ntlmssp.Type2Message t2m;
+			} catch (IOException e) {
 
-                     try {
+				throw new RuntimeException("Invalid Type2 message", e);
 
-                           t2m = new jcifs.ntlmssp.Type2Message(jcifs.util.Base64.decode(challenge));
+			}
 
-                     } catch (IOException e) {
+			jcifs.ntlmssp.Type3Message t3m = new jcifs.ntlmssp.Type3Message(
+					t2m, password, domain,
 
-                           throw new RuntimeException("Invalid Type2 message", e);
+					username, host, 0);
 
-                     }
+			return jcifs.util.Base64.encode(t3m.toByteArray());
 
- 
+		}
 
-                     jcifs.ntlmssp.Type3Message t3m = new jcifs.ntlmssp.Type3Message(t2m, password, domain,
-
-                                  username, host, 0);
-
-                     return jcifs.util.Base64.encode(t3m.toByteArray());
-
-              }
-
-       }
+	}
 
 }

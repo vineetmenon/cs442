@@ -8,13 +8,14 @@
 package com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.holders;
 
 public final class ExecutionInfo2Holder implements javax.xml.rpc.holders.Holder {
-    public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ExecutionInfo2 value;
+	public com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ExecutionInfo2 value;
 
-    public ExecutionInfo2Holder() {
-    }
+	public ExecutionInfo2Holder() {
+	}
 
-    public ExecutionInfo2Holder(com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ExecutionInfo2 value) {
-        this.value = value;
-    }
+	public ExecutionInfo2Holder(
+			com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices.ExecutionInfo2 value) {
+		this.value = value;
+	}
 
 }
