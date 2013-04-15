@@ -3,6 +3,7 @@ package com.business.report;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 
 import javax.xml.rpc.holders.ByteArrayHolder;
 import javax.xml.rpc.holders.StringHolder;
@@ -17,17 +18,38 @@ import org.apache.commons.httpclient.auth.AuthPolicy;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
+import java.util.ResourceBundle;
 
 
 public class GenerateReport
 {
-	public static final String USERNAME = "ravir-mac-w8\\reportuser";
-	public static final String PASSWORD = "cs442";
+
+	public static  String USERNAME ;
+	public static  String PASSWORD ;
+	public static String DOMAIN;
+	public static String DEPLOYMENT_FOLDER;
+	public static String REPORT_SERVER_URL;
+	public static String REPORT_SERVER_PORT;
+	public static String REPORT_SERVER_NAME;
+	public static String REPORT_SERVER_OUTPUT_FORMAT;
+
+
+	public static void setReportServerVariables() {
+		ResourceBundle bundle = ResourceBundle.getBundle("SchoolRankingSystem");
+		USERNAME = bundle.getString("username");
+		DOMAIN = bundle.getString("domain");
+		PASSWORD = bundle.getString("password");
+		DEPLOYMENT_FOLDER = bundle.getString("report_deployment_folder");	
+		REPORT_SERVER_URL= bundle.getString("report_server_url");
+		REPORT_SERVER_PORT= bundle.getString("report_server_port");
+		REPORT_SERVER_NAME= bundle.getString("report_server_name");
+		REPORT_SERVER_OUTPUT_FORMAT= bundle.getString("report_output_format");
+
+	}
+
 
 	public static boolean generate(String type, String ids, String field)
-	{
-		System.out.println(" type " +type+" id: "+ids+ " field : "+field);
+	{	
 		AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JCIFS_NTLMScheme.class);
 		ReportExecutionServiceSoapStub service = getService();
 
@@ -66,11 +88,11 @@ public class GenerateReport
 		{
 			ExecutionInfo info=null;
 			if (type=="Bar Graph") {
-				info= service.loadReport("/School Ranking System/BarGraph", null); //Load report -- REPORTFOLDER/REPORTNAME
+				info= service.loadReport("/"+DEPLOYMENT_FOLDER+"/BarGraph", null); //Load report -- REPORTFOLDER/REPORTNAME
 			} else if (type=="Pie Chart") {
-				info= service.loadReport("/School Ranking System/PieChart", null); //Load report -- REPORTFOLDER/REPORTNAME
+				info= service.loadReport("/"+DEPLOYMENT_FOLDER+"/PieChart", null); //Load report -- REPORTFOLDER/REPORTNAME
 			} else if (type=="Scatter Plot") {
-				info= service.loadReport("/School Ranking System/ScatterPlot", null); //Load report -- REPORTFOLDER/REPORTNAME
+				info= service.loadReport("/"+DEPLOYMENT_FOLDER+"/ScatterPlot", null); //Load report -- REPORTFOLDER/REPORTNAME
 			} else {
 				System.out.println("error- cannot render");
 				return false;
@@ -78,7 +100,7 @@ public class GenerateReport
 			setExecutionId(service, info.getExecutionID()); //You must set the session id before continuing
 			service.setExecutionParameters(parameters, "en-us"); //Set report parameters
 
-			String format = "PDF"; //Valid options are HTML4.0, MHTML, EXCEL, CSV, PDF, etc
+			String format = REPORT_SERVER_OUTPUT_FORMAT; //Valid options are HTML4.0, MHTML, EXCEL, CSV, PDF, etc
 			String deviceInfo = "<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>"; //Only generate an HTML fragment
 			ByteArrayHolder result = new ByteArrayHolder();
 			StringHolder extension = new StringHolder();
@@ -161,10 +183,10 @@ public class GenerateReport
 	{
 		try
 		{
-			String endpoint = "http://127.0.0.1:80/ReportServer_SQLEXPRESS/ReportExecution2005.asmx";   
+			String endpoint = "http://"+REPORT_SERVER_URL+":"+REPORT_SERVER_PORT+"/"+REPORT_SERVER_NAME+"/ReportExecution2005.asmx";   
 			ReportExecutionServiceSoapStub service = (ReportExecutionServiceSoapStub)new ReportExecutionServiceLocator(getEngineConfiguration()).getReportExecutionServiceSoap(new URL(endpoint));
 
-			service.setUsername(USERNAME);
+			service.setUsername(DOMAIN+"\\"+USERNAME);
 			service.setPassword(PASSWORD);
 			return service;
 		}

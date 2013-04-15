@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 
 import com.business.ReportModel;
+import com.business.report.GenerateReport;
 import com.gui.ReportGUI;
 
 public class SchoolController {
@@ -25,6 +26,8 @@ public class SchoolController {
 		theView.AddUpdateDataListener(new UpdateDataListener());
 		theView.AddExitButtonListener(new ExitButtonListerner());
 		theView.AddClearButtonListener(new ClearButtonListener());
+		
+		GenerateReport.setReportServerVariables();
 	}
 	
 	
