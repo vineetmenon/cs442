@@ -27,12 +27,8 @@ public class SchoolController {
 		theView.AddExitButtonListener(new ExitButtonListerner());
 		theView.AddClearButtonListener(new ClearButtonListener());
 
-		try {
-			GenerateReport.setReportServerVariables();
-		} catch (IOException e) {
+		GenerateReport.setReportServerVariables();
 
-			e.printStackTrace();
-		}
 	}
 
 	private String selectedSchools;
