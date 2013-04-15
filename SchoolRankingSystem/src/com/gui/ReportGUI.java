@@ -36,9 +36,8 @@ public class ReportGUI extends javax.swing.JFrame {
 	private String parameterList;
 	private String schoolList;
 
-	private Vector<String> schoolNamesAndID;
-
 	private Map<String, String> reportParametersMap;
+	private Map<String,String> schoolNameMap;
 
 	public String getReportType() {
 		return reportType;
@@ -64,20 +63,20 @@ public class ReportGUI extends javax.swing.JFrame {
 		this.schoolList = schoolList;
 	}
 
-	public Vector<String> getSchoolNamesAndID() {
-		return schoolNamesAndID;
-	}
-
-	public void setSchoolNamesAndID(Vector<String> schoolNamesAndID) {
-		this.schoolNamesAndID = schoolNamesAndID;
-	}
-
 	public Map<String, String> getReportParameters() {
 		return reportParametersMap;
 	}
 
 	public void setReportParameters(Map<String, String> reportParameters) {
 		this.reportParametersMap = reportParameters;
+	}
+
+	public Map<String,String> getSchoolNameMap() {
+		return schoolNameMap;
+	}
+
+	public void setSchoolNameMap(Map<String,String> schoolNameMap) {
+		this.schoolNameMap = schoolNameMap;
 	}
 
 	/** Creates new form ReportGUI */
@@ -98,19 +97,26 @@ public class ReportGUI extends javax.swing.JFrame {
 		schoolLabel = new javax.swing.JLabel();
 		schoolNameListPane = new javax.swing.JScrollPane();
 
-		schoolNamesList = new javax.swing.JList(schoolNamesAndID);
-		schoolNamesList
-		.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
 		// Populate Report Parameters
 		Vector<String> reportParameters = new Vector<String>();
+		Vector<String> schoolName = new Vector<String>();
 
 		ArrayList<String> reportParametersValuesList = new ArrayList<String>(
 				reportParametersMap.values());
+		ArrayList<String> schoolNameValuesList = new ArrayList<String>(
+				schoolNameMap.values());
 
 		for (int i = 0; i < reportParametersValuesList.size(); i++) {
 			reportParameters.add(reportParametersValuesList.get(i));
 		}
+
+		for(int i=0; i< schoolNameValuesList.size(); i++) {
+			schoolName.add(schoolNameValuesList.get(i));
+		}
+
+		schoolNamesList = new javax.swing.JList(schoolName);
+		schoolNamesList
+		.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		reportParametersList = new javax.swing.JList(reportParameters);
 		reportParametersList
@@ -374,17 +380,19 @@ public class ReportGUI extends javax.swing.JFrame {
 
 		Object[] chosenSchoolsList = null;
 		chosenSchoolsList = schoolNamesList.getSelectedValues(); // get list of
-		// chosen
-		// schools
-		// parse id numbers here. will send to report later.
-		String[] tempSchoolToken = new String[2];
+		
 
 		for (int x = 0; x < chosenSchoolsList.length; x++) {
-			tempSchoolToken = chosenSchoolsList[x].toString().split("#|\\)");
-			// System.out.println(tempSchoolToken[1] +
-			// " was a chosen school id"); //extract id number from the chosen
-			// schools in the jlist.
-			schoolList = schoolList + tempSchoolToken[1] + ",";
+			
+			String key = getKeyByValue(schoolNameMap,
+					chosenSchoolsList[x].toString());
+			if (key != null) {
+				if (schoolList == null) {
+					schoolList = key + ",";
+				} else {
+					schoolList = schoolList + key + ",";
+				}
+			}
 		}
 		schoolList = schoolList.substring(0, schoolList.length() - 1);
 		System.out.println("id list " + schoolList);
@@ -404,11 +412,16 @@ public class ReportGUI extends javax.swing.JFrame {
 				|| ((reportType == "Pie Chart") && (chosenParametersList.length == 1))
 				|| ((reportType == "Scatter Plot") && (chosenParametersList.length == 2))) {
 			for (int x = 0; x < chosenParametersList.length; x++) {
-				// System.out.println("Chosen Parameter #" + x + " is: " +
-				// getKeyByValue(columns,chosenParametersList[x].toString()));
-				parameterList = parameterList
-						+ getKeyByValue(reportParametersMap,
-								chosenParametersList[x].toString()) + ",";
+				String key = getKeyByValue(reportParametersMap,
+						chosenParametersList[x].toString());
+				if (key != null ) {
+					if(parameterList == null) {
+						parameterList = key + ",";
+					} else {
+						parameterList = parameterList + key + ",";
+
+					}
+				}
 			}
 			parameterList = parameterList.substring(0,
 					parameterList.length() - 1);
@@ -447,6 +460,9 @@ public class ReportGUI extends javax.swing.JFrame {
 		schoolNamesList.clearSelection();
 		parameterComboBox.setSelectedIndex(0);
 		reportParametersList.clearSelection();
+		reportType=null;
+		schoolList=null;
+		parameterList=null;
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

@@ -18,7 +18,7 @@ public class SchoolRanking {
 		 ReportGUI theView = new ReportGUI();
 		 ReportModel theModel = new ReportModel();
 		 @SuppressWarnings("unused")
-		SchoolController theController = new SchoolController(theView, theModel);
+		 SchoolController theController = new SchoolController(theView, theModel);
 		 theView.setVisible(true);
 		  
 		

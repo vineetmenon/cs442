@@ -16,8 +16,8 @@ public class SchoolController {
 		this.theModel = theModel;
 		this.theView = theView;
 		
-		theView.setSchoolNamesAndID(theModel.getSchoolList());
 		theView.setReportParameters(theModel.getParameterList());
+		theView.setSchoolNameMap(theModel.getSchoolList());
 		theView.initComponents();
 		
 		theView.AddParameterComboBoxListener(new ParamterComboBoxListener());
@@ -103,6 +103,7 @@ public class SchoolController {
 			if(!output) {
 				System.out.println("Report not generated");
 			}
+			theView.reset();
 		}
 		
 	}

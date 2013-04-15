@@ -34,23 +34,26 @@ public class ReportModel {
 		}
 	}
 
-	public Vector<String> getSchoolList() {
-		Vector<String> schoolNamesAndID= new Vector<String>();
+	
+	
+	public Map<String,String> getSchoolList() {
+		Map<String,String> schoolNamesAndID= new HashMap<String,String>();
 
-		String QueryString= "SELECT * from School";
+		String QueryString= "SELECT id,name,district,county,schoolType from School order by name";
 
 		try{
 			Statement statement= dbconnect.createStatement();
 			ResultSet rs= statement.executeQuery(QueryString);
 			while(rs.next()){
 				String tempCounty= rs.getString(4); //check for cook county district
-				String tempSchoolType = rs.getString(5);
+				String tempSchoolType = rs.getString(5); // check for High School
 				if((tempCounty.equals("Cook")) && ( tempSchoolType.equals("HIGH SCHOOL"))){
-					schoolNamesAndID.add(rs.getString(2) + " (ID#"+ (new Integer(rs.getInt(1))).toString() +")");
+					//schoolNamesAndID.add(rs.getString(2) + " (ID#"+ (new Integer(rs.getInt(1))).toString() +")");
+					String val ="";
+					val = rs.getString(2) +"-"+ rs.getString(3);
+					schoolNamesAndID.put(Integer.toString(rs.getInt(1)), val);
 				}
 			}
-
-			Collections.sort(schoolNamesAndID);
 
 			return schoolNamesAndID;
 

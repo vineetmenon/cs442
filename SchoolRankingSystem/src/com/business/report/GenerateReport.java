@@ -27,7 +27,7 @@ public class GenerateReport
 
 	public static boolean generate(String type, String ids, String field)
 	{
-		//System.out.println(" type " +type+" id: "+ids+ " field : "+field);
+		System.out.println(" type " +type+" id: "+ids+ " field : "+field);
 		AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JCIFS_NTLMScheme.class);
 		ReportExecutionServiceSoapStub service = getService();
 
@@ -60,7 +60,7 @@ public class GenerateReport
 		parameters[0].setValue(ids);
 
 
-		String timeStamp=new SimpleDateFormat("yyyyMMddhhmm'.pdf'").format(new Date());
+		String timeStamp=new SimpleDateFormat("yyyyMMddhhmmss'.pdf'").format(new Date());
 		String fileName = "C:\\temp\\"+timeStamp;
 		try
 		{
