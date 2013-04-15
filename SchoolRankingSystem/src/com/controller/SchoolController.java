@@ -108,15 +108,16 @@ public class SchoolController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// validate the form
-			theView.validateForm();
-			// generate the report
-			boolean output = theModel.generateNewReport(
-					theView.getReportType(), theView.getSchoolList(),
-					theView.getParameterList());
-			if (!output) {
-				System.out.println("Report not generated");
+			if (theView.validateForm()) {
+				// generate the report only if form is valid
+				boolean output = theModel.generateNewReport(
+						theView.getReportType(), theView.getSchoolList(),
+						theView.getParameterList());
+				if (!output) {
+					System.out.println("Report not generated");
+				}
+				theView.reset();
 			}
-			theView.reset();
 		}
 
 	}
