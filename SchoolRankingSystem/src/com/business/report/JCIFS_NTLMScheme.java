@@ -400,7 +400,8 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 
                */
 
-           private String credentialCharset = DEFAULT_CHARSET;
+           @SuppressWarnings("unused")
+		private String credentialCharset = DEFAULT_CHARSET;
 
           
 

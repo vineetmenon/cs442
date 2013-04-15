@@ -4,9 +4,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.xml.rpc.holders.ByteArrayHolder;
 import javax.xml.rpc.holders.StringHolder;
 import javax.xml.soap.SOAPException;
@@ -20,9 +17,7 @@ import org.apache.commons.httpclient.auth.AuthPolicy;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+
 
 
 public class GenerateReport
@@ -30,7 +25,7 @@ public class GenerateReport
 	public static final String USERNAME = "ravir-mac-w8\\reportuser";
 	public static final String PASSWORD = "cs442";
 
-	public static void generate(String type, String ids, String field)
+	public static boolean generate(String type, String ids, String field)
 	{
 		//System.out.println(" type " +type+" id: "+ids+ " field : "+field);
 		AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JCIFS_NTLMScheme.class);
@@ -58,7 +53,7 @@ public class GenerateReport
 			parameters[1].setValue(param[0]);
 			parameters[2].setValue(param[1]);
 		} else {
-			return;
+			return false;
 		}
 		parameters[0] = new ParameterValue();
 		parameters[0].setName("ids");
@@ -78,7 +73,7 @@ public class GenerateReport
 				info= service.loadReport("/School Ranking System/ScatterPlot", null); //Load report -- REPORTFOLDER/REPORTNAME
 			} else {
 				System.out.println("error- cannot render");
-				return;
+				return false;
 			}
 			setExecutionId(service, info.getExecutionID()); //You must set the session id before continuing
 			service.setExecutionParameters(parameters, "en-us"); //Set report parameters
@@ -104,7 +99,7 @@ public class GenerateReport
 			output.write((result.value));
 
 			output.close();
-			return;
+			return true;
 			/*JEditorPane jep = new JEditorPane();
 		     jep.setEditable(false);   
 
@@ -128,6 +123,7 @@ public class GenerateReport
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return false;
 		} finally {
 
 		}
