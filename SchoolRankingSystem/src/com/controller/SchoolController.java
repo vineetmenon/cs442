@@ -2,6 +2,7 @@ package com.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 import com.business.ReportModel;
@@ -27,7 +28,12 @@ public class SchoolController {
 		theView.AddExitButtonListener(new ExitButtonListerner());
 		theView.AddClearButtonListener(new ClearButtonListener());
 		
-		GenerateReport.setReportServerVariables();
+		try {
+			GenerateReport.setReportServerVariables();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -67,7 +73,7 @@ public class SchoolController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			
 			
 		}
 		

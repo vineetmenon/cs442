@@ -3,7 +3,7 @@ package com.business.report;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Properties;
 
 import javax.xml.rpc.holders.ByteArrayHolder;
 import javax.xml.rpc.holders.StringHolder;
@@ -17,7 +17,10 @@ import com.microsoft.schemas.sqlserver._2005._06._30.reporting.reportingservices
 import org.apache.commons.httpclient.auth.AuthPolicy;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 
@@ -34,16 +37,48 @@ public class GenerateReport
 	public static String REPORT_SERVER_OUTPUT_FORMAT;
 
 
-	public static void setReportServerVariables() {
-		ResourceBundle bundle = ResourceBundle.getBundle("SchoolRankingSystem");
-		USERNAME = bundle.getString("username");
-		DOMAIN = bundle.getString("domain");
-		PASSWORD = bundle.getString("password");
-		DEPLOYMENT_FOLDER = bundle.getString("report_deployment_folder");	
-		REPORT_SERVER_URL= bundle.getString("report_server_url");
-		REPORT_SERVER_PORT= bundle.getString("report_server_port");
-		REPORT_SERVER_NAME= bundle.getString("report_server_name");
-		REPORT_SERVER_OUTPUT_FORMAT= bundle.getString("report_output_format");
+	public static void setReportServerVariables() throws IOException {
+		// for properties file inside the jar structure
+				/*ResourceBundle bundle = ResourceBundle.getBundle("SchoolRankingSystem");
+				USERNAME = mainProperties.getProperty("username");
+				DOMAIN = mainProperties.getProperty("domain");
+				PASSWORD = mainProperties.getProperty("password");
+				DEPLOYMENT_FOLDER = mainProperties.getProperty("report_deployment_folder");	
+				REPORT_SERVER_URL= mainProperties.getProperty("report_server_url");
+				REPORT_SERVER_PORT= mainProperties.getProperty("report_server_port");
+				REPORT_SERVER_NAME= mainProperties.getProperty("report_server_name");
+				REPORT_SERVER_OUTPUT_FORMAT= mainProperties.getProperty("report_output_format");*/
+				
+				// to have properties file in same folder as jar file
+				// no need to recompile properties jar to chnage properties
+				Properties mainProperties = new Properties();
+
+			    FileInputStream file;
+
+			    //the base folder is ./, the root of the main.properties file  
+			    String path = "./SchoolRankingSystem.properties";
+
+			    //load the file handle for main.properties
+			    file = new FileInputStream(path);
+
+			    //load all the properties from this file
+			    mainProperties.load(file);
+
+			    //we have loaded the properties, so close the file handle
+			    file.close();
+
+			    //retrieve the property we are intrested, the app.version
+			    USERNAME = mainProperties.getProperty("username");
+				DOMAIN = mainProperties.getProperty("domain");
+				PASSWORD = mainProperties.getProperty("password");
+				DEPLOYMENT_FOLDER = mainProperties.getProperty("report.deployment.folder");	
+				REPORT_SERVER_URL= mainProperties.getProperty("report.server.url");
+				REPORT_SERVER_PORT= mainProperties.getProperty("report.server.port");
+				REPORT_SERVER_NAME= mainProperties.getProperty("report.server.name");
+				REPORT_SERVER_OUTPUT_FORMAT= mainProperties.getProperty("report.output.format");
+
+				System.out.println(DEPLOYMENT_FOLDER);
+		
 
 	}
 
