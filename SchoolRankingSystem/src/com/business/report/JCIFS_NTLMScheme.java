@@ -85,6 +85,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 
 	}
 
+	@Override
 	public String authenticate(Credentials credentials, HttpMethod method)
 
 	throws AuthenticationException {
@@ -151,6 +152,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 
 	}
 
+	@Override
 	public String authenticate(Credentials credentials, String method,
 
 	String uri) throws AuthenticationException {
@@ -161,6 +163,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 
 	}
 
+	@Override
 	public String getID() {
 
 		throw new RuntimeException(
@@ -194,6 +197,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @return the parameter with the given name
 	 */
 
+	@Override
 	public String getParameter(String name) {
 
 		if (name == null) {
@@ -217,6 +221,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @return <code>null</code>
 	 */
 
+	@Override
 	public String getRealm() {
 
 		return null;
@@ -232,6 +237,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @return <code>ntlm</code>
 	 */
 
+	@Override
 	public String getSchemeName() {
 
 		return "ntlm";
@@ -253,6 +259,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @since 3.0
 	 */
 
+	@Override
 	public boolean isComplete() {
 
 		return this.state == TYPE3_MSG_GENERATED || this.state == FAILED;
@@ -272,6 +279,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @since 3.0
 	 */
 
+	@Override
 	public boolean isConnectionBased() {
 
 		return true;
@@ -299,6 +307,7 @@ public class JCIFS_NTLMScheme implements AuthScheme {
 	 * @since 3.0
 	 */
 
+	@Override
 	public void processChallenge(final String challenge)
 
 	throws MalformedChallengeException {

@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class GenerateReport {
@@ -52,7 +51,7 @@ public class GenerateReport {
 
 		try {
 			// to have properties file in same folder as jar file
-			// no need to recompile properties jar to chnage properties
+			// no need to recompile properties jar to change properties
 			Properties mainProperties = new Properties();
 
 			FileInputStream file;
@@ -69,7 +68,7 @@ public class GenerateReport {
 			// we have loaded the properties, so close the file handle
 			file.close();
 
-			// retrieve the property we are intrested, the app.version
+			// retrieve the property values from file
 			USERNAME = mainProperties.getProperty("username");
 			DOMAIN = mainProperties.getProperty("domain");
 			PASSWORD = mainProperties.getProperty("password");
